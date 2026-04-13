@@ -1,0 +1,2 @@
+New-VMSwitch -Name "ExternalSwitch" -NetAdapterName "Ethernet" -AllowManagementOS $true -ErrorAction SilentlyContinue
+New-VMSwitch -Name "RAC-Private" -SwitchType Internal -ErrorAction SilentlyContinue
