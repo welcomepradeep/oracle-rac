@@ -9,6 +9,10 @@ jobs:
   terraform:
     runs-on: self-hosted   # since you started your own runner
 
+    defaults:
+      run:
+        working-directory: terraform
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,11 +22,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform
+        
       
       - name: Terraform Plan
         run: terraform plan
-        working-directory: terraform
+        
 
       # ⚠️ apply only if you really want auto-deploy
       - name: Terraform Apply
