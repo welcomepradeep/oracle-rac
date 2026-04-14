@@ -28,6 +28,6 @@ jobs:
         run: terraform plan
         
 
-      # ⚠️ apply only if you really want auto-deploy
+      # apply only if you really want auto-deploy
       - name: Terraform Apply
         run: terraform apply -auto-approve
