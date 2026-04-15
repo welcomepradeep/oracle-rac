@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform:
-    runs-on: [self-hosted, windows]   # since you started your own runner
+    runs-on: [self-hosted, windows]
 
     defaults:
       run:
@@ -21,15 +21,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/terraform
-        run: terraform -chdir=terraform init
-        
-      
-      - name: Terraform Plan
-        working-directory: ${{ github.workspace }}/terraform
-        run: terraform -chdir=terraform plan
-        
+        run: terraform init
 
-      # apply only if you really want auto-deploy
+      - name: Terraform Plan
+        run: terraform plan
+
       - name: Terraform Apply
-        run: terraform -chdir=terraform apply -auto-approve
+        run: terraform apply -auto-approve
