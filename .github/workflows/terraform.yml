@@ -27,10 +27,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform -chdir=$(dirname $(find . -name "main.tf" | head -1)) init
+        working-directory: ${{ github.workspace }}/oracle-rac/oracle-rac/terraform
+        run: terraform init
 
       - name: Terraform Plan
-        run: terraform -chdir=$(dirname $(find . -name "main.tf" | head -1)) plan
+        working-directory: ${{ github.workspace }}/oracle-rac/oracle-rac/terraform
+        run: terraform plan
 
       - name: Terraform Apply
-        run: terraform -chdir=$(dirname $(find . -name "main.tf" | head -1)) apply -auto-approve
+        working-directory: ${{ github.workspace }}/oracle-rac/oracle-rac/terraform
+        run: terraform apply -auto-approve
