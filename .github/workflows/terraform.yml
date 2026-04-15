@@ -21,12 +21,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/terraform
         run: terraform -chdir=terraform init
         
       
       - name: Terraform Plan
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/terraform
         run: terraform -chdir=terraform plan
         
 
