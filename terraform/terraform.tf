@@ -1,0 +1,39 @@
+name: Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: self-hosted   # safer than forcing windows label if runner mismatch
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # DEBUG STEP (added)
+      - name: Debug Paths
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Root contents:"
+          ls -la
+          echo "Terraform folder contents:"
+          ls -la terraform || echo "terraform folder not found"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: ${{ github.workspace }}/terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ${{ github.workspace }}/terraform
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ${{ github.workspace }}/terraform
+        run: terraform apply -auto-approve
