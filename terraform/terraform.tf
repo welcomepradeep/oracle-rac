@@ -27,13 +27,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/terraform
+        working-directory: terraform
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: ${{ github.workspace }}/terraform
+        working-directory: terraform
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: ${{ github.workspace }}/terraform
+        working-directory: terraform
         run: terraform apply -auto-approve
