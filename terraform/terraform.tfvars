@@ -1,15 +1,28 @@
 ########################################
 # RAC Node Names
 ########################################
-rac1_name = "rac-node1"
-rac2_name = "rac-node2"
+rac1_name = "rac1"
+rac2_name = "rac2"
 
 ########################################
 # VM Configuration
 ########################################
-memory   = 8192
+vms = {
+  rac1 = {
+    memory      = 8192
+    cpu         = 2
+    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
+    switch_name = "ExternalSwitch"
+  }
 
-vhd_path = "C:\\Pradeep\\CICDRUNNEROS\\oracle-linux.vhdx"
+  rac2 = {
+    memory      = 8192
+    cpu         = 2
+    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
+    switch_name = "ExternalSwitch"
+  }
+
+}
 
 ########################################
 # Network Configuration
