@@ -2,24 +2,30 @@
 # RAC Node Names
 ########################################
 variable "rac1_name" {
-  default = "rac-node1"
+  default = "rac1"
 }
 
 variable "rac2_name" {
-  default = "rac-node2"
+  default = "rac2"
 }
 
 ########################################
 # VM Configuration
 ########################################
-variable "memory" {
-  description = "Memory in MB"
-  default     = 8192
-}
+vms = {
+  rac1 = {
+    memory      = 8192
+    cpu         = 2
+    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
+    switch_name = "ExternalSwitch"
+  }
 
-variable "vhd_path" {
-  description = "Base OS VHDX path"
-  default     = "C:\\Pradeep\\CICDRUNNEROS\\oracle-linux.vhdx"
+  rac2 = {
+    memory      = 8192
+    cpu         = 2
+    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
+    switch_name = "ExternalSwitch"
+  }
 }
 
 ########################################
