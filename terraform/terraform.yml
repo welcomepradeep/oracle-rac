@@ -1,4 +1,4 @@
-name: Terraform Hyper-V Deployment
+name: terraform Hyper-V Deployment
 
 on:
   push:
@@ -22,17 +22,17 @@ jobs:
           echo "List terraform folder:"
           ls -la terraform || echo "terraform folder not found"
 
-      - name: Setup Terraform
+      - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
+      - name: terraform Init
         run: terraform init
         working-directory: ./terraform   # ✅ explicit path
 
-      - name: Terraform Plan
+      - name: terraform Plan
         run: terraform plan
         working-directory: ./terraform
 
-      - name: Terraform Apply
+      - name: terraform Apply
         run: terraform apply -auto-approve
         working-directory: ./terraform
