@@ -13,18 +13,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Auto-detect Terraform dir
-        run: |
-          TF_DIR=$(find . -name main.tf | head -n 1 | xargs dirname)
-          echo "Using Terraform dir: $TF_DIR"
-
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Run terraform
         run: |
-          cd "$TF_DIR"
+          cd /u02/stage/actions-runner/_work/oracle-rac/oracle-rac/terraform
           pwd
           ls -la
           terraform init
