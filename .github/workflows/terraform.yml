@@ -25,9 +25,11 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Run Terraform
+      - name: Run terraform
         run: |
           cd terraform
+          pwd
+          ls -la
           terraform init
           terraform plan
           terraform apply -auto-approve
