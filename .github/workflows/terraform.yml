@@ -13,24 +13,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Debug Structure
+      - name: Auto-detect Terraform dir
         run: |
-          echo "Current Dir:"
-          pwd
-          echo "Root files:"
-          ls -la
-          echo "Terraform folder:"
-          ls -la terraform || echo "terraform folder missing"
+          TF_DIR=$(find . -name main.tf | head -n 1 | xargs dirname)
+          echo "Using Terraform dir: $TF_DIR"
+
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Run terraform
         run: |
-          cd terraform
+          cd "$TF_DIR"
           pwd
           ls -la
           terraform init
           terraform plan
           terraform apply -auto-approve
-        working-directory: ./terraform/
+        
