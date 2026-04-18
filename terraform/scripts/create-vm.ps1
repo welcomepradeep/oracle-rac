@@ -5,14 +5,16 @@ param (
     [string]$switchName
 )
 
-$vmPath = "C:\HyperV\VMs\$vmName"
-$newVhd = "$vmPath\$vmName.vhdx"
+$vm = Get-VM -Name $vmName -ErrorAction SilentlyContinue
 
-New-Item -ItemType Directory -Path $vmPath -Force | Out-Null
-Copy-Item $vhdPath $newVhd -Force
+if (-not $vm) {
+    New-VM -Name $vmName `
+        -MemoryStartupBytes (${memory}MB) `
+        -VHDPath $vhdPath `
+        -SwitchName $switchName
 
-New-VM -Name $vmName -MemoryStartupBytes (${memory}MB) -VHDPath $newVhd -Generation 2 -Path $vmPath
-
-Connect-VMNetworkAdapter -VMName $vmName -SwitchName $switchName
-
-Start-VM -Name $vmName
+    Start-VM -Name $vmName
+    Write-Host "VM $vmName created"
+} else {
+    Write-Host "VM $vmName already exists"
+}
