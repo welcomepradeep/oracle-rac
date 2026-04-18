@@ -27,12 +27,12 @@ jobs:
 
       - name: terraform Init
         run: terraform init
-        working-directory: ./terraform   # ✅ explicit path
+        working-directory: terraform   # explicit path
 
       - name: terraform Plan
         run: terraform plan
-        working-directory: ./terraform
+        working-directory: terraform
 
       - name: terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./terraform
+        working-directory: terraform
