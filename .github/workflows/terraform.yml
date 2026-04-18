@@ -18,7 +18,7 @@ jobs:
 
       - name: Run terraform
         run: |
-          cd oracle-rac/terraform
+          cd ./terraform
           pwd
           ls -la
           terraform init
