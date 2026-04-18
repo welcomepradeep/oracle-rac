@@ -1,4 +1,4 @@
-name: terraform Hyper-V Deployment
+name: terraform
 
 on:
   push:
