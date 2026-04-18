@@ -11,7 +11,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: /oracle-rac/oracle-rac/terraform   # IMPORTANT FIX
+        working-directory: terraform   # IMPORTANT FIX
 
     steps:
       - name: Checkout Code
@@ -27,5 +27,5 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: /oracle-rac/oracle-rac/terraform
+        working-directory: terraform
         run: terraform apply -auto-approve
