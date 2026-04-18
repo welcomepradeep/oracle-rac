@@ -1,6 +1,3 @@
-module "compute" {
-  source = "./modules/compute"
-
   vms = {
     rac1 = {
       memory      = 8192
@@ -22,4 +19,3 @@ module "compute" {
     module.network,
     module.storage
   ]
-}
