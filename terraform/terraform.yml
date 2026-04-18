@@ -9,23 +9,30 @@ jobs:
   terraform:
     runs-on: self-hosted
 
-    defaults:
-      run:
-        working-directory: terraform   # IMPORTANT FIX
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Debug - Show Directory Structure
+        run: |
+          echo "Current Dir:"
+          pwd
+          echo "List root:"
+          ls -la
+          echo "List terraform folder:"
+          ls -la terraform || echo "terraform folder not found"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./terraform   # ✅ explicit path
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: ./terraform
 
       - name: Terraform Apply
-        working-directory: terraform
         run: terraform apply -auto-approve
+        working-directory: ./terraform
