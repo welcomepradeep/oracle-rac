@@ -1,4 +1,4 @@
-name: terraform Hyper-V Deployment
+name: Terraform Hyper-V Deployment
 
 on:
   push:
@@ -13,26 +13,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Debug - Show Directory Structure
+      - name: Debug Structure
         run: |
           echo "Current Dir:"
           pwd
-          echo "List root:"
+          echo "Root files:"
           ls -la
-          echo "List terraform folder:"
-          ls -la terraform || echo "terraform folder not found"
+          echo "Terraform folder:"
+          ls -la terraform || echo "terraform folder missing"
 
-      - name: Setup terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: terraform Init
-        run: terraform init
-        working-directory: terraform   # explicit path
-
-      - name: terraform Plan
-        run: terraform plan
-        working-directory: terraform
-
-      - name: terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: terraform
+      - name: Run Terraform
+        run: |
+          cd terraform
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
