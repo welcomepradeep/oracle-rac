@@ -1,5 +1,8 @@
 module "network" {
   source = "./modules/network"
+
+  switch_name  = var.public_switch
+  adapter_name = "Ethernet"
 }
 
 module "storage" {
