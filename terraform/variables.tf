@@ -12,19 +12,30 @@ variable "rac2_name" {
 ########################################
 # VM Configuration
 ########################################
-vms = {
-  rac1 = {
-    memory      = 8192
-    cpu         = 2
-    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
-    switch_name = "ExternalSwitch"
-  }
+variable "vms" {
+  description = "VM configuration for RAC nodes"
 
-  rac2 = {
-    memory      = 8192
-    cpu         = 2
-    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
-    switch_name = "ExternalSwitch"
+  type = map(object({
+    memory      = number
+    cpu         = number
+    vhd_path    = string
+    switch_name = string
+  }))
+
+  default = {
+    rac1 = {
+      memory      = 8192
+      cpu         = 2
+      vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
+      switch_name = "ExternalSwitch"
+    }
+
+    rac2 = {
+      memory      = 8192
+      cpu         = 2
+      vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
+      switch_name = "ExternalSwitch"
+    }
   }
 }
 
