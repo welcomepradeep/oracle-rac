@@ -28,12 +28,12 @@ variable "vms" {
 ########################################
 # Network Configuration
 ########################################
-variable "public_switch" {
+variable "switch_name" {
   description = "Public network switch"
   type        = string
 }
 
-variable "private_switch" {
+variable "adapter_name" {
   description = "Private RAC interconnect"
   type        = string
 }
