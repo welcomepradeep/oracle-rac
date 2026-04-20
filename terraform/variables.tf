@@ -2,10 +2,12 @@
 # RAC Node Names
 ########################################
 variable "rac1_name" {
+  type    = string
   default = "rac1"
 }
 
 variable "rac2_name" {
+  type    = string
   default = "rac2"
 }
 
@@ -21,22 +23,6 @@ variable "vms" {
     vhd_path    = string
     switch_name = string
   }))
-
-  default = {
-    rac1 = {
-      memory      = 8192
-      cpu         = 2
-      vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
-      switch_name = "ExternalSwitch"
-    }
-
-    rac2 = {
-      memory      = 8192
-      cpu         = 2
-      vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
-      switch_name = "ExternalSwitch"
-    }
-  }
 }
 
 ########################################
@@ -44,12 +30,12 @@ variable "vms" {
 ########################################
 variable "public_switch" {
   description = "Public network switch"
-  default     = "ExternalSwitch"
+  type        = string
 }
 
 variable "private_switch" {
   description = "Private RAC interconnect"
-  default     = "RAC-Private"
+  type        = string
 }
 
 ########################################
@@ -57,22 +43,11 @@ variable "private_switch" {
 ########################################
 variable "shared_disks" {
   description = "Shared disks for Oracle RAC (ASM)"
-  
+
   type = list(object({
     name = string
-    size = number  # Size in GB
+    size = number
   }))
-
-  default = [
-    {
-      name = "ocr.vhdx"
-      size = 10
-    },
-    {
-      name = "data.vhdx"
-      size = 10
-    }
-  ]
 }
 
 ########################################
@@ -80,5 +55,21 @@ variable "shared_disks" {
 ########################################
 variable "disk_base_path" {
   description = "Location where shared disks will be created"
-  default     = "C:\\Pradeep\\CICDRUNNEROS"
+  type        = string
+}
+
+########################################
+# Hyper-V Connection
+########################################
+variable "hyperv_host" {
+  type = string
+}
+
+variable "hyperv_user" {
+  type = string
+}
+
+variable "hyperv_password" {
+  type      = string
+  sensitive = true
 }

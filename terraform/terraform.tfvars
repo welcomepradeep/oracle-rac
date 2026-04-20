@@ -1,38 +1,25 @@
-########################################
-# RAC Node Names
-########################################
 rac1_name = "rac1"
 rac2_name = "rac2"
 
-########################################
-# VM Configuration
-########################################
 vms = {
   rac1 = {
     memory      = 8192
     cpu         = 2
-    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac1.vhdx"
+    vhd_path    = "C:\\HyperV\\Disks\\rac1.vhdx"
     switch_name = "ExternalSwitch"
   }
 
   rac2 = {
     memory      = 8192
     cpu         = 2
-    vhd_path    = "C:\\Pradeep\\CICDRUNNEROS\\rac2.vhdx"
+    vhd_path    = "C:\\HyperV\\Disks\\rac2.vhdx"
     switch_name = "ExternalSwitch"
   }
-
 }
 
-########################################
-# Network Configuration
-########################################
 public_switch  = "ExternalSwitch"
 private_switch = "RAC-Private"
 
-########################################
-# Shared Storage (ASM Disks)
-########################################
 shared_disks = [
   {
     name = "ocr.vhdx"
@@ -44,7 +31,8 @@ shared_disks = [
   }
 ]
 
-########################################
-# Disk Base Path
-########################################
 disk_base_path = "C:\\HyperV\\Disks"
+
+hyperv_host     = "192.168.1.10"
+hyperv_user     = "Administrator"
+hyperv_password = "YourPassword"
