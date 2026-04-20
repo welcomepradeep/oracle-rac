@@ -33,6 +33,6 @@ shared_disks = [
 
 disk_base_path = "C:\\HyperV\\Disks"
 
-hyperv_host     = "169.254.81.156"
+hyperv_host     = "192.168.56.1"
 hyperv_user     = "winrmadmin"
 hyperv_password = "winrm@123"
