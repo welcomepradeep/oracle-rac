@@ -1,9 +1,8 @@
-variable "vms" {
-  description = "Map of VM configurations"
-  type = map(object({
-    memory      = number
-    cpu         = number
-    vhd_path    = string
-    switch_name = string
-  }))
-}
+variable "rac1_name" {}
+variable "rac2_name" {}
+
+variable "memory" {}
+variable "vhd_path" {}
+
+variable "public_switch" {}
+variable "private_switch" {}
