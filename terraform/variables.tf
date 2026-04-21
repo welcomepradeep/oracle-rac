@@ -76,3 +76,19 @@ variable "hyperv_password" {
   type      = string
   sensitive = true
 }
+
+variable "public_switch" {
+  type = string
+}
+
+variable "private_switch" {
+  type = string
+}
+
+variable "memory" {
+  type = number
+}
+
+variable "vhd_path" {
+  type = string
+}
