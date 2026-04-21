@@ -16,6 +16,11 @@ module "storage" {
 module "compute" {
   source = "./modules/compute"
 
+  vms = {
+    (var.rac1_name) = {}
+    (var.rac2_name) = {}
+  }
+  
   rac1_name   = var.rac1_name
   rac2_name   = var.rac2_name
 
