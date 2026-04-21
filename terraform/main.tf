@@ -7,6 +7,10 @@ module "network" {
 
 module "storage" {
   source = "./modules/storage"
+
+  disk_name    = "rac-disk1"
+  disk_path    = "C:\\HyperV\\Disks"
+  disk_size_gb = 10
 }
 
 module "compute" {

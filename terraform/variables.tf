@@ -41,13 +41,16 @@ variable "adapter_name" {
 ########################################
 # Shared Storage (ASM Disks)
 ########################################
-variable "shared_disks" {
-  description = "Shared disks for Oracle RAC (ASM)"
+variable "disk_name" {
+  type = string
+}
 
-  type = list(object({
-    name = string
-    size = number
-  }))
+variable "disk_path" {
+  type = string
+}
+
+variable "disk_size_gb" {
+  type = number
 }
 
 ########################################

@@ -23,6 +23,10 @@ private_switch = "RAC-Private"
 adapter_name = "eth1"
 switch_name  = "rac-switch"
 
+disk_name    = "rac-disk1"
+disk_path    = "C:\\HyperV\\Disks"
+disk_size_gb = 10
+
 shared_disks = [
   {
     name = "ocr.vhdx"
