@@ -42,4 +42,4 @@ disk_base_path = "C:\\HyperV\\Disks"
 
 hyperv_host     = "192.168.56.1"
 hyperv_user     = "winrmadmin"
-hyperv_password = "cloud_login_83"
+hyperv_password = "winrm@123"
