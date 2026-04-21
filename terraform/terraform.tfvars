@@ -20,6 +20,9 @@ vms = {
 public_switch  = "ExternalSwitch"
 private_switch = "RAC-Private"
 
+adapter_name = "eth1"
+switch_name  = "rac-switch"
+
 shared_disks = [
   {
     name = "ocr.vhdx"
