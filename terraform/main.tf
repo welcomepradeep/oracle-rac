@@ -1,8 +1,12 @@
 module "network" {
   source = "./modules/network"
 
-  switch_name  = var.public_switch
+  switch_name  = "ExternalSwitch"
   adapter_name = "Ethernet"
+
+  hyperv_host     = "192.168.56.1"
+  hyperv_user     = "winrmadmin"
+  hyperv_password = "winrm@123"
 }
 
 module "storage" {
