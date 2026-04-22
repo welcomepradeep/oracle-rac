@@ -11,7 +11,7 @@ on:
 jobs:
   terraform-apply:
     name: Apply — create VMs
-    runs-on: [self-hosted, rhel8, hyperv]
+    runs-on: self-hosted
     if: github.event.inputs.confirm == 'APPLY'
 
     defaults:
