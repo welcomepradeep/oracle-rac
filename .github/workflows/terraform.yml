@@ -1,34 +1,35 @@
-name: terraform
+name: Terraform apply 
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:    # manual trigger only — never auto-apply
+    inputs:
+      confirm:
+        description: "Type APPLY to confirm VM creation"
+        required: true
+        default: ""
 
 jobs:
-  terraform:
-    runs-on: self-hosted
+  terraform-apply:
+    name: Apply — create VMs
+    runs-on: [self-hosted, rhel8, hyperv]
+    if: github.event.inputs.confirm == 'APPLY'
 
     defaults:
       run:
         working-directory: terraform
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          clean: true
-          
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Run terraform
-        run: |
-          cd ./terraform
-          pwd
-          ls -la
-          terraform init
-          terraform plan
-          terraform apply -auto-approve
-        
+ 
+      - name: Terraform init
+        run: terraform init
+ 
+      - name: Terraform plan        # Always plan before apply — shows what will change
+        run: terraform plan
+ 
+      - name: Terraform apply
+        run: terraform apply -auto-approve
+ 
+      - name: Show outputs
+        run: terraform output vm_summary
