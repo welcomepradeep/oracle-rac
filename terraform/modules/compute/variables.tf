@@ -1,17 +1,10 @@
-variable "rac1_name" {
-  type = string
-}
-
-variable "rac2_name" {
-  type = string
-}
-
-variable "memory" {
-  type = number
-}
-
-variable "vhd_path" {
-  type = string
+variable "vms" {
+  type = map(object({
+    memory      = number
+    cpu         = number
+    vhd_path    = string
+    switch_name = string
+  }))
 }
 
 variable "public_switch" {
@@ -31,9 +24,6 @@ variable "hyperv_user" {
 }
 
 variable "hyperv_password" {
-  type = string
-}
-
-variable "vms" {
-  type = map(any)
+  type      = string
+  sensitive = true
 }

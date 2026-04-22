@@ -1,14 +1,23 @@
-variable "disk_name" {
-  description = "Disk name"
-  type        = string
+variable "shared_disks" {
+  type = list(object({
+    name = string
+    size = number
+  }))
 }
 
-variable "disk_path" {
-  description = "Path where VHD will be created"
-  type        = string
+variable "disk_base_path" {
+  type = string
 }
 
-variable "disk_size_gb" {
-  description = "Disk size in GB"
-  type        = number
+variable "hyperv_host" {
+  type = string
+}
+
+variable "hyperv_user" {
+  type = string
+}
+
+variable "hyperv_password" {
+  type      = string
+  sensitive = true
 }
