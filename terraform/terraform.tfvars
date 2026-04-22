@@ -1,6 +1,3 @@
-rac1_name = "rac1"
-rac2_name = "rac2"
-
 vms = {
   rac1 = {
     memory      = 8192
@@ -18,14 +15,8 @@ vms = {
 }
 
 public_switch  = "ExternalSwitch"
-private_switch = "RAC-Private"
-
-adapter_name = "eth1"
-switch_name  = "rac-switch"
-
-disk_name    = "rac-disk1"
-disk_path    = "C:\\HyperV\\Disks"
-disk_size_gb = 10
+private_switch = "PrivateSwitch"
+adapter_name   = "PrivateAdapter"
 
 shared_disks = [
   {

@@ -1,17 +1,4 @@
 ########################################
-# RAC Node Names
-########################################
-variable "rac1_name" {
-  type    = string
-  default = "rac1"
-}
-
-variable "rac2_name" {
-  type    = string
-  default = "rac2"
-}
-
-########################################
 # VM Configuration
 ########################################
 variable "vms" {
@@ -28,34 +15,29 @@ variable "vms" {
 ########################################
 # Network Configuration
 ########################################
-variable "switch_name" {
-  description = "Public network switch"
-  type        = string
+variable "public_switch" {
+  type = string
+}
+
+variable "private_switch" {
+  type = string
 }
 
 variable "adapter_name" {
-  description = "Private RAC interconnect"
-  type        = string
+  type = string
 }
 
 ########################################
 # Shared Storage (ASM Disks)
 ########################################
-variable "disk_name" {
-  type = string
+variable "shared_disks" {
+  description = "List of shared disks"
+  type = list(object({
+    name = string
+    size = number
+  }))
 }
 
-variable "disk_path" {
-  type = string
-}
-
-variable "disk_size_gb" {
-  type = number
-}
-
-########################################
-# Disk Base Path
-########################################
 variable "disk_base_path" {
   description = "Location where shared disks will be created"
   type        = string
@@ -75,20 +57,4 @@ variable "hyperv_user" {
 variable "hyperv_password" {
   type      = string
   sensitive = true
-}
-
-variable "public_switch" {
-  type = string
-}
-
-variable "private_switch" {
-  type = string
-}
-
-variable "memory" {
-  type = number
-}
-
-variable "vhd_path" {
-  type = string
 }

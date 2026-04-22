@@ -1,36 +1,43 @@
+########################################
+# NETWORK
+########################################
 module "network" {
   source = "./modules/network"
 
-  switch_name  = "ExternalSwitch"
-  adapter_name = "Ethernet"
+  switch_name  = var.public_switch
+  adapter_name = var.adapter_name
 
-  hyperv_host     = "192.168.56.1"
-  hyperv_user     = "winrmadmin"
-  hyperv_password = "winrm@123"
+  hyperv_host     = var.hyperv_host
+  hyperv_user     = var.hyperv_user
+  hyperv_password = var.hyperv_password
 }
 
+########################################
+# STORAGE (ASM DISKS)
+########################################
 module "storage" {
   source = "./modules/storage"
 
-  disk_name    = "rac-disk1"
-  disk_path    = "C:\\HyperV\\Disks"
-  disk_size_gb = 10
+  shared_disks   = var.shared_disks
+  disk_base_path = var.disk_base_path
+
+  hyperv_host     = var.hyperv_host
+  hyperv_user     = var.hyperv_user
+  hyperv_password = var.hyperv_password
 }
 
+########################################
+# COMPUTE (VM CREATION)
+########################################
 module "compute" {
   source = "./modules/compute"
 
-  vms = {
-    (var.rac1_name) = {}
-    (var.rac2_name) = {}
-  }
-  
-  rac1_name   = var.rac1_name
-  rac2_name   = var.rac2_name
-
-  memory      = var.memory
-  vhd_path    = var.vhd_path
+  vms = var.vms
 
   public_switch  = var.public_switch
   private_switch = var.private_switch
+
+  hyperv_host     = var.hyperv_host
+  hyperv_user     = var.hyperv_user
+  hyperv_password = var.hyperv_password
 }
