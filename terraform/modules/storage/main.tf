@@ -1,3 +1,7 @@
+# ==========================================================
+# modules/storage/main.tf
+# Pure SSH Method (Linux Terraform -> SSH -> Windows Hyper-V)
+# ==========================================================
 resource "null_resource" "create_disks" {
 
   for_each = {
@@ -12,13 +16,16 @@ resource "null_resource" "create_disks" {
 
   provisioner "local-exec" {
     command = <<EOT
-pwsh -Command "
-Invoke-Command -ComputerName ${var.hyperv_host} -Credential (New-Object System.Management.Automation.PSCredential('${var.hyperv_user}', (ConvertTo-SecureString '${var.hyperv_password}' -AsPlainText -Force))) -ScriptBlock {
-    $diskPath = '${var.disk_base_path}\\${each.value.name}'
-    if (-not (Test-Path $diskPath)) {
-        New-VHD -Path $diskPath -SizeBytes (${each.value.size}GB) -Dynamic
-    }
-}"
+ssh ${var.hyperv_user}@${var.hyperv_host} powershell -Command "
+\$diskPath='${var.disk_base_path}\\${each.value.name}'
+
+if (-not (Test-Path \$diskPath)) {
+    New-VHD `
+      -Path \$diskPath `
+      -SizeBytes (${each.value.size}GB) `
+      -Dynamic
+}
+"
 EOT
   }
 }

@@ -1,3 +1,7 @@
+# ==========================================================
+# modules/network/main.tf
+# Pure SSH Method (Linux Terraform -> SSH -> Windows Hyper-V)
+# ==========================================================
 resource "null_resource" "create_switch" {
 
   triggers = {
@@ -7,12 +11,14 @@ resource "null_resource" "create_switch" {
 
   provisioner "local-exec" {
     command = <<EOT
-pwsh -Command "
-Invoke-Command -ComputerName ${var.hyperv_host} -Credential (New-Object System.Management.Automation.PSCredential('${var.hyperv_user}', (ConvertTo-SecureString '${var.hyperv_password}' -AsPlainText -Force))) -ScriptBlock {
-    if (-not (Get-VMSwitch -Name '${var.switch_name}' -ErrorAction SilentlyContinue)) {
-        New-VMSwitch -Name '${var.switch_name}' -NetAdapterName '${var.adapter_name}' -AllowManagementOS $true
-    }
-}"
+ssh ${var.hyperv_user}@${var.hyperv_host} powershell -Command "
+if (-not (Get-VMSwitch -Name '${var.switch_name}' -ErrorAction SilentlyContinue)) {
+    New-VMSwitch `
+      -Name '${var.switch_name}' `
+      -NetAdapterName '${var.adapter_name}' `
+      -AllowManagementOS \$true
+}
+"
 EOT
   }
 }

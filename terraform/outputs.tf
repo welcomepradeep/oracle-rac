@@ -1,59 +1,56 @@
 ########################################
-# VM SUMMARY
-########################################
-output "vm_summary" {
-  description = "Summary of all RAC VMs"
-
-  value = {
-    for vm_name, vm in var.vms :
-    vm_name => {
-      memory_mb   = vm.memory
-      cpu         = vm.cpu
-      vhd_path    = vm.vhd_path
-      switch_name = vm.switch_name
-    }
-  }
-}
-
-########################################
-# VM NAMES
+# COMPUTE OUTPUTS
 ########################################
 output "vm_names" {
-  description = "List of VM names"
-  value       = keys(var.vms)
+  description = "List of RAC VM names"
+  value       = module.compute.vm_names
+}
+
+output "vm_details" {
+  description = "Detailed VM configuration"
+  value       = module.compute.vm_details
+}
+
+output "compute_status" {
+  description = "Compute provisioning status"
+  value       = module.compute.compute_status
 }
 
 ########################################
-# NETWORK INFO
+# NETWORK OUTPUTS
 ########################################
-output "network_config" {
+output "network" {
   description = "Network configuration details"
+  value       = module.network.network_status
+}
+
+########################################
+# STORAGE OUTPUTS
+########################################
+output "disk_paths" {
+  description = "Paths of shared ASM disks"
+  value       = module.storage.disk_paths
+}
+
+output "disk_details" {
+  description = "Detailed shared disk configuration"
+  value       = module.storage.disk_details
+}
+
+output "storage_status" {
+  description = "Storage provisioning status"
+  value       = module.storage.storage_status
+}
+
+########################################
+# CONSOLIDATED SUMMARY (VERY USEFUL)
+########################################
+output "rac_environment_summary" {
+  description = "Complete RAC infrastructure summary"
 
   value = {
-    public_switch  = var.public_switch
-    private_switch = var.private_switch
-    adapter_name   = var.adapter_name
+    vms     = module.compute.vm_details
+    network = module.network.network_status
+    storage = module.storage.disk_details
   }
-}
-
-########################################
-# SHARED DISKS
-########################################
-output "shared_disks" {
-  description = "ASM shared disks configuration"
-
-  value = [
-    for disk in var.shared_disks : {
-      name = disk.name
-      size = disk.size
-      path = "${var.disk_base_path}\\${disk.name}"
-    }
-  ]
-}
-########################################
-# HYPERV HOST INFO
-########################################
-output "hyperv_host" {
-  description = "Hyper-V host used for deployment"
-  value       = var.hyperv_host
 }
