@@ -32,26 +32,12 @@ ${var.hyperv_user}@${var.hyperv_host} \
 \$switch='${each.value.switch_name}';
 \$private='${var.private_switch}';
 
-# Create disk if missing
-if (!(Test-Path \$vhd)) {
-    New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic | Out-Null
-}
+if (!(Test-Path \$vhd)) { New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic; }
 
-# Create VM if missing
-if (!(Get-VM -Name \$vmName -ErrorAction SilentlyContinue)) {
-
-    New-VM -Name \$vmName `
-      -MemoryStartupBytes ${each.value.memory}MB `
-      -Generation 2 `
-      -VHDPath \$vhd `
-      -SwitchName \$switch | Out-Null
-
-    Set-VMProcessor -VMName \$vmName -Count ${each.value.cpu}
-
-    Add-VMNetworkAdapter `
-      -VMName \$vmName `
-      -SwitchName \$private `
-      -Name PrivateNIC
+if (!(Get-VM -Name \$vm -ErrorAction SilentlyContinue)) {
+ New-VM -Name \$vm -MemoryStartupBytes ${each.value.memory}MB -Generation 2 -VHDPath \$vhd -SwitchName \$pub;
+ Set-VMProcessor -VMName \$vm -Count ${each.value.cpu};
+ Add-VMNetworkAdapter -VMName \$vm -SwitchName \$pri -Name PrivateNIC;
 }
 \""
 EOT
