@@ -17,6 +17,7 @@ variable "vms" {
 ########################################
 variable "public_switch" {
   type = string
+  default = "ExternalSwitch"
 }
 
 variable "private_switch" {
@@ -25,6 +26,7 @@ variable "private_switch" {
 
 variable "adapter_name" {
   type = string
+  default = "Wi-Fi"
 }
 
 ########################################
