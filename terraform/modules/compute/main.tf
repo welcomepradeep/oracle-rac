@@ -22,7 +22,38 @@ sshpass -p '${var.hyperv_password}' ssh \
 -o PubkeyAuthentication=no \
 -o NumberOfPasswordPrompts=1 \
 ${var.hyperv_user}@${var.hyperv_host} \
-"powershell -NoProfile -NonInteractive -Command \"if (-not (Get-VM -Name '${each.key}' -ErrorAction SilentlyContinue)) { New-VM -Name '${each.key}' -MemoryStartupBytes ${each.value.memory}MB -Generation 2 -VHDPath '${each.value.vhd_path}' -SwitchName '${each.value.switch_name}'; Set-VMProcessor -VMName '${each.key}' -Count ${each.value.cpu}; Add-VMNetworkAdapter -VMName '${each.key}' -SwitchName '${var.private_switch}' -Name 'PrivateNIC' }\""
+"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"
+
+\$ErrorActionPreference='Stop';
+
+# Variables
+\$vmName='${each.key}';
+\$vhd='${each.value.vhd_path}';
+\$switch='${each.value.switch_name}';
+\$private='${var.private_switch}';
+
+# Create disk if missing
+if (!(Test-Path \$vhd)) {
+    New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic | Out-Null
+}
+
+# Create VM if missing
+if (!(Get-VM -Name \$vmName -ErrorAction SilentlyContinue)) {
+
+    New-VM -Name \$vmName `
+      -MemoryStartupBytes ${each.value.memory}MB `
+      -Generation 2 `
+      -VHDPath \$vhd `
+      -SwitchName \$switch | Out-Null
+
+    Set-VMProcessor -VMName \$vmName -Count ${each.value.cpu}
+
+    Add-VMNetworkAdapter `
+      -VMName \$vmName `
+      -SwitchName \$private `
+      -Name PrivateNIC
+}
+\""
 EOT
   }
 }
