@@ -16,12 +16,12 @@ resource "null_resource" "create_disks" {
 
   provisioner "local-exec" {
     command = <<EOT
-ssh -o IdentitiesOnly=yes ${var.hyperv_user}@${var.hyperv_host} "powershell -NoProfile -Command \"
-\$diskPath='${var.disk_base_path}\\${each.value.name}';
-if (-not (Test-Path \$diskPath)) {
-New-VHD -Path \$diskPath -SizeBytes (${each.value.size}GB) -Dynamic;
-}
-\""
+sshpass -p '${var.hyperv_password}' ssh \
+-o StrictHostKeyChecking=no \
+-o PreferredAuthentications=password \
+-o PubkeyAuthentication=no \
+${var.hyperv_user}@${var.hyperv_host} \
+"powershell -NoProfile -NonInteractive -Command \"\$diskPath='${var.disk_base_path}\\${each.value.name}'; if (-not (Test-Path \$diskPath)) { New-VHD -Path \$diskPath -SizeBytes (${each.value.size}GB) -Dynamic }\""
 EOT
   }
 }

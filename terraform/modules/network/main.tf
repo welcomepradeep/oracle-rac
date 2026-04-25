@@ -11,11 +11,13 @@ resource "null_resource" "create_switch" {
 
   provisioner "local-exec" {
     command = <<EOT
-ssh -o IdentitiesOnly=yes ${var.hyperv_user}@${var.hyperv_host} "powershell -NoProfile -Command \"
-if (-not (Get-VMSwitch -Name '${var.switch_name}' -ErrorAction SilentlyContinue)) {
-New-VMSwitch -Name '${var.switch_name}' -NetAdapterName '${var.adapter_name}' -AllowManagementOS \$true;
-}
-\""
+sshpass -p '${var.hyperv_password}' ssh \
+-o StrictHostKeyChecking=no \
+-o PreferredAuthentications=password \
+-o PubkeyAuthentication=no \
+-o NumberOfPasswordPrompts=1 \
+${var.hyperv_user}@${var.hyperv_host} \
+"powershell -NoProfile -NonInteractive -Command \"if (-not (Get-VMSwitch -Name '${var.switch_name}' -ErrorAction SilentlyContinue)) { New-VMSwitch -Name '${var.switch_name}' -NetAdapterName '${var.adapter_name}' -AllowManagementOS \$true }\""
 EOT
   }
 }
