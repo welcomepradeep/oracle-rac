@@ -54,3 +54,7 @@ output "rac_environment_summary" {
     storage = module.storage.disk_details
   }
 }
+
+output "vm_summary" {
+  value = var.vms
+}
