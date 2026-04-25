@@ -16,16 +16,12 @@ resource "null_resource" "create_disks" {
 
   provisioner "local-exec" {
     command = <<EOT
-ssh ${var.hyperv_user}@${var.hyperv_host} powershell -Command "
-\$diskPath='${var.disk_base_path}\\${each.value.name}'
-
+ssh -o IdentitiesOnly=yes ${var.hyperv_user}@${var.hyperv_host} "powershell -NoProfile -Command \"
+\$diskPath='${var.disk_base_path}\\${each.value.name}';
 if (-not (Test-Path \$diskPath)) {
-    New-VHD `
-      -Path \$diskPath `
-      -SizeBytes (${each.value.size}GB) `
-      -Dynamic
+New-VHD -Path \$diskPath -SizeBytes (${each.value.size}GB) -Dynamic;
 }
-"
+\""
 EOT
   }
 }
