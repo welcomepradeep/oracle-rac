@@ -9,10 +9,12 @@ variable "vms" {
 
 variable "public_switch" {
   type = string
+  default = "ExternalSwitch"
 }
 
 variable "private_switch" {
   type = string
+  default = "InternalSwitch"
 }
 
 variable "hyperv_host" {

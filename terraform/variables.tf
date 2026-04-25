@@ -22,6 +22,7 @@ variable "public_switch" {
 
 variable "private_switch" {
   type = string
+  default = "InternalSwitch"
 }
 
 variable "adapter_name" {
