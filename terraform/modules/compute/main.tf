@@ -12,6 +12,7 @@ resource "null_resource" "create_vm" {
     cpu      = each.value.cpu
     vhd_path = each.value.vhd_path
     switch   = each.value.switch_name
+    iso_path = each.value.iso_path
   }
 
   provisioner "local-exec" {

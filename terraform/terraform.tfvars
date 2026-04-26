@@ -4,6 +4,7 @@ vms = {
     cpu         = 2
     vhd_path    = "C:\\HyperV\\Disks\\rac1.vhdx"
     switch_name = "ExternalSwitch"
+    iso_path    = "C:\\OracleLinux8.4\\OracleLinux-R8-U4-x86_64-dvd.iso"
   }
 
   rac2 = {
@@ -11,6 +12,7 @@ vms = {
     cpu         = 2
     vhd_path    = "C:\\HyperV\\Disks\\rac2.vhdx"
     switch_name = "ExternalSwitch"
+    iso_path    = "C:\\OracleLinux8.4\\OracleLinux-R8-U4-x86_64-dvd.iso"
   }
 }
 

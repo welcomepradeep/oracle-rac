@@ -4,6 +4,7 @@ variable "vms" {
     cpu         = number
     vhd_path    = string
     switch_name = string
+    iso_path    = string
   }))
 }
 
