@@ -32,12 +32,12 @@ ${var.hyperv_user}@${var.hyperv_host} \
 \$switch='${each.value.switch_name}';
 \$private='${var.private_switch}';
 
-if (!(Test-Path \$vhd)) { New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic; }
+if (!(Test-Path \$vhd)) { New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic }
 
-if (!(Get-VM -Name \$vm -ErrorAction SilentlyContinue)) {
- New-VM -Name \$vm -MemoryStartupBytes ${each.value.memory}MB -Generation 2 -VHDPath \$vhd -SwitchName \$pub;
- Set-VMProcessor -VMName \$vm -Count ${each.value.cpu};
- Add-VMNetworkAdapter -VMName \$vm -SwitchName \$pri -Name PrivateNIC;
+if (!(Get-VM -Name \$vmName -ErrorAction SilentlyContinue)) {
+ New-VM -Name \$vmName -MemoryStartupBytes ${each.value.memory}MB -Generation 2 -VHDPath \$vhd -SwitchName \$pub;
+ Set-VMProcessor -VMName \$vmName -Count ${each.value.cpu};
+ Add-VMNetworkAdapter -VMName \$vmName -SwitchName \$pri -Name PrivateNIC;
 }
 \""
 EOT
