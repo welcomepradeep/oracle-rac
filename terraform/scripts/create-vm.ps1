@@ -45,6 +45,7 @@ if (-not $vm) {
     # Create VM
     Write-Host "Creating VM..."
     New-VM -Name $vmName -Generation 2 -MemoryStartupBytes ($memory * 1MB) -VHDPath $vhdPath -SwitchName $switchName
+    Set-VMFirmware -VMName $vmName -EnableSecureBoot Off
 
     # Configure CPU
     Set-VMProcessor -VMName $vmName -Count $cpu
