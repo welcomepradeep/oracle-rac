@@ -4,8 +4,8 @@
 module "network" {
   source = "./modules/network"
 
-  switch_name  = "ExternalSwitch"
-  adapter_name = "Wi-Fi"
+  switch_name  = var.public_switch
+  adapter_name = var.adapter_name
 
   hyperv_host     = var.hyperv_host
   hyperv_user     = var.hyperv_user
@@ -34,8 +34,8 @@ module "compute" {
 
   vms = var.vms
 
-  public_switch  = "ExternalSwitch"
-  private_switch = "InternalSwitch"
+  public_switch  = var.public_switch
+  private_switch = var.private_switch
 
   hyperv_host     = var.hyperv_host
   hyperv_user     = var.hyperv_user

@@ -15,7 +15,7 @@ vms = {
 }
 
 public_switch  = "ExternalSwitch"
-private_switch = "PrivateSwitch"
+private_switch = "InternalSwitch"
 adapter_name   = "PrivateAdapter"
 
 shared_disks = [
