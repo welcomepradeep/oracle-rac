@@ -1,7 +1,9 @@
 # ==========================================================
 # modules/compute/main.tf
-# Pure SSH Method (Linux Terraform -> SSH -> Windows Hyper-V)
+# Production Grade Version
+# Linux Terraform Runner -> Copy PS1 -> Windows Hyper-V Host
 # ==========================================================
+
 resource "null_resource" "create_vm" {
 
   for_each = var.vms
@@ -13,43 +15,45 @@ resource "null_resource" "create_vm" {
     vhd_path = each.value.vhd_path
     switch   = each.value.switch_name
     iso_path = each.value.iso_path
+    script   = filemd5("${path.root}/scripts/create-vm.ps1")
   }
 
   provisioner "local-exec" {
     command = <<EOT
+# ----------------------------------------
+# Step 1 - Create remote folder
+# ----------------------------------------
 sshpass -p '${var.hyperv_password}' ssh \
 -o StrictHostKeyChecking=no \
 -o PreferredAuthentications=password \
 -o PubkeyAuthentication=no \
--o NumberOfPasswordPrompts=1 \
 ${var.hyperv_user}@${var.hyperv_host} \
-"powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"
+"powershell -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null\""
 
-\$ErrorActionPreference='Stop';
+# ----------------------------------------
+# Step 2 - Copy script to Windows host
+# ----------------------------------------
+sshpass -p '${var.hyperv_password}' scp \
+-o StrictHostKeyChecking=no \
+${path.root}/scripts/create-vm.ps1 \
+${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/scripts/create-vm.ps1
 
-# Variables
-\$vmName='${each.key}';
-\$vhd='${each.value.vhd_path}';
-\$switch='${each.value.switch_name}';
-\$private='${var.private_switch}';
-
-Write-Host 'Creating VM:' \$vmName;
-Write-Host 'Public Switch:' \$pub;
-Write-Host 'Private Switch:' \$pri;
-
-if (!(Test-Path \$vhd)) { New-VHD -Path \$vhd -SizeBytes 30GB -Dynamic; }
-
-if (!(Get-VM -Name \$vmName -ErrorAction SilentlyContinue)) {
- New-VM -Name \$vmName -MemoryStartupBytes ${each.value.memory}MB -Generation 2 -VHDPath \$vhd -SwitchName \$pub;
- Set-VMProcessor -VMName \$vmName -Count ${each.value.cpu};
- Add-VMNetworkAdapter -VMName \$vmName -SwitchName \$pri -Name PrivateNIC;
- Start-VM -Name \$vmName
- Write-Host 'VM Created Successfully'
-}
-else {
-   Write-Host 'VM already exists'
-}
-\""
+# ----------------------------------------
+# Step 3 - Execute script remotely
+# ----------------------------------------
+sshpass -p '${var.hyperv_password}' ssh \
+-o StrictHostKeyChecking=no \
+-o PreferredAuthentications=password \
+-o PubkeyAuthentication=no \
+${var.hyperv_user}@${var.hyperv_host} \
+"powershell -ExecutionPolicy Bypass -File C:\\Terraform\\scripts\\create-vm.ps1 \
+-vmName '${each.key}' \
+-memory ${each.value.memory} \
+-vhdPath '${each.value.vhd_path}' \
+-switchName '${each.value.switch_name}' \
+-isoPath '${each.value.iso_path}' \
+-cpu ${each.value.cpu} \
+-privateSwitch '${var.private_switch}'"
 EOT
   }
 }
