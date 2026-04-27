@@ -5,19 +5,27 @@ param (
     [string]$switchName,
     [string]$isoPath,
     [int]$cpu = 2,
-    [string]$privateSwitch = "InternalSwitch"
+    [string]$privateSwitch = "InternalSwitch",
+    [string]$hostname,
+    [string]$publicIP,
+    [string]$privateIP,
+    [string]$ksFile
 )
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "===================================="
-Write-Host "Starting VM creation for $vmName"
-Write-Host "Memory: $memory MB"
-Write-Host "CPU: $cpu"
-Write-Host "VHD Path: $vhdPath"
-Write-Host "ISO Path: $isoPath"
-Write-Host "Public Switch: $switchName"
+Write-Host "Starting Silent VM Build : $vmName"
+Write-Host "Memory        : $memory MB"
+Write-Host "CPU           : $cpu"
+Write-Host "VHD Path      : $vhdPath"
+Write-Host "ISO Path      : $isoPath"
+Write-Host "Public Switch : $switchName"
 Write-Host "Private Switch: $privateSwitch"
+Write-Host "Hostname      : $hostname"
+Write-Host "Public IP     : $publicIP"
+Write-Host "Private IP    : $privateIP"
+Write-Host "Kickstart     : $ksFile"
 Write-Host "===================================="
 
 # Validate Public Switch
@@ -30,6 +38,17 @@ if (-not $pub) {
 if (!(Test-Path $isoPath)) {
     throw "ISO file '$isoPath' not found."
 }
+
+# ---------------------------------------------------
+# Build Kickstart ISO Folder
+# ---------------------------------------------------
+
+$ksRoot   = "C:\Terraform\kickstart"
+$ksSource = Join-Path $ksRoot $ksFile
+
+if (!(Test-Path $ksSource)) {
+    Write-Host "WARNING: Kickstart file not found: $ksSource"
+    Write-Host "VM will boot installer normally unless ks file exists."
 
 # Check if VM already exists
 $vm = Get-VM -Name $vmName -ErrorAction SilentlyContinue
