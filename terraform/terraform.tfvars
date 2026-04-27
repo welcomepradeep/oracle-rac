@@ -5,6 +5,10 @@ vms = {
     vhd_path    = "C:\\HyperV\\Disks\\rac1.vhdx"
     switch_name = "ExternalSwitch"
     iso_path    = "C:\\OracleLinux8.4\\OracleLinux-R8-U4-x86_64-dvd.iso"
+    hostname    = "rac1.oracle.com"
+    public_ip   = "192.168.0.101"
+    private_ip  = "10.10.10.11"
+    ks_file     = "rac1.cfg"
   }
 
   rac2 = {
@@ -13,6 +17,10 @@ vms = {
     vhd_path    = "C:\\HyperV\\Disks\\rac2.vhdx"
     switch_name = "ExternalSwitch"
     iso_path    = "C:\\OracleLinux8.4\\OracleLinux-R8-U4-x86_64-dvd.iso"
+    hostname    = "rac2.oracle.com"
+    public_ip   = "192.168.0.102"
+    private_ip  = "10.10.10.12"
+    ks_file     = "rac2.cfg"
   }
 }
 
