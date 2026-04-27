@@ -10,6 +10,10 @@ variable "vms" {
     vhd_path    = string
     switch_name = string
     iso_path    = string
+    hostname    = string
+    public_ip   = string
+    private_ip  = string
+    ks_file     = string
   }))
 }
 
