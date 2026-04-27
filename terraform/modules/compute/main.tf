@@ -23,7 +23,11 @@ resource "null_resource" "create_vm" {
   }
 
   provisioner "local-exec" {
+
+    interpreter = ["/bin/bash", "-c"]
+
     command = <<EOT
+set -e
 # ----------------------------------------
 # Step 1 - Create remote folder
 # ----------------------------------------
@@ -32,7 +36,9 @@ sshpass -p '${var.hyperv_password}' ssh \
 -o PreferredAuthentications=password \
 -o PubkeyAuthentication=no \
 ${var.hyperv_user}@${var.hyperv_host} \
-"powershell -ExecutionPolicy Bypass -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null; New-Item -ItemType Directory -Force -Path C:\\Terraform\\kickstart | Out-Null\""
+"powershell -ExecutionPolicy Bypass -Command \"
+New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null; 
+New-Item -ItemType Directory -Force -Path C:\\Terraform\\kickstart | Out-Null\""
 
 # ----------------------------------------
 # Step 2 - Copy script to Windows host
