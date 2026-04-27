@@ -32,7 +32,7 @@ sshpass -p '${var.hyperv_password}' ssh \
 -o PreferredAuthentications=password \
 -o PubkeyAuthentication=no \
 ${var.hyperv_user}@${var.hyperv_host} \
-"powershell -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null\""
+"powershell -ExecutionPolicy Bypass -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null; New-Item -ItemType Directory -Force -Path C:\\Terraform\\kickstart | Out-Null\""
 
 # ----------------------------------------
 # Step 2 - Copy script to Windows host
@@ -42,8 +42,16 @@ sshpass -p '${var.hyperv_password}' scp \
 ${path.root}/scripts/create-vm.ps1 \
 ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/scripts/create-vm.ps1
 
+# ------------------------------------------------
+# Step 3 - Copy Kickstart file
+# ------------------------------------------------
+sshpass -p '${var.hyperv_password}' scp \
+-o StrictHostKeyChecking=no \
+${path.root}/kickstart/${each.value.ks_file} \
+${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/kickstart/${each.value.ks_file}
+
 # ----------------------------------------
-# Step 3 - Execute script remotely
+# Step 4 - Execute script remotely
 # ----------------------------------------
 sshpass -p '${var.hyperv_password}' ssh -o StrictHostKeyChecking=no ${var.hyperv_user}@${var.hyperv_host} "powershell -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null\""
 
