@@ -36,8 +36,8 @@ echo "========================================"
 HOST="winrmadmin@192.168.56.1"
 PASS="winrm@123"
 
-SCRIPT_LOCAL="${path.module}/scripts/create-vm.ps1"
-KS_LOCAL="${path.module}/kickstart/${each.key}.cfg"
+SCRIPT_LOCAL="${path.root}/scripts/create-vm.ps1"
+KS_LOCAL="${path.root}/kickstart/${each.key}.cfg"
 
 SCRIPT_REMOTE="C:/Terraform/scripts/create-vm.ps1"
 KS_REMOTE="C:/Terraform/kickstart/${each.key}.cfg"
