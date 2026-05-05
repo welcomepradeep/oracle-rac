@@ -53,7 +53,7 @@ ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/scripts/create-vm.ps1
 # ------------------------------------------------
 sshpass -p '${var.hyperv_password}' scp \
 -o StrictHostKeyChecking=no \
-${path.root}/kickstart/${each.value.ks_file} \
+${path.module}/kickstart/${each.key}.cfg \
 ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/kickstart/${each.value.ks_file}
 
 # ----------------------------------------
