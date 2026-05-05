@@ -78,13 +78,6 @@ sshpass -p "$PASS" scp -o StrictHostKeyChecking=no \
 "$KS_LOCAL" \
 $HOST:/$KS_REMOTE
 
-# ------------------------------------------------
-# Step 3 - Copy Kickstart file
-# ------------------------------------------------
-sshpass -p '${var.hyperv_password}' scp \
--o StrictHostKeyChecking=no \
-${path.root}/kickstart/${each.key}.cfg \
-${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/kickstart/${each.value.ks_file}
 
 # ----------------------------------------
 # Step 4 - Execute script remotely
