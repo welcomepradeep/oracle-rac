@@ -45,7 +45,7 @@ New-Item -ItemType Directory -Force -Path C:\\Terraform\\kickstart | Out-Null\""
 # ----------------------------------------
 sshpass -p '${var.hyperv_password}' scp \
 -o StrictHostKeyChecking=no \
-${path.root}/scripts/create-vm.ps1 \
+${path.module}/scripts/create-vm.ps1 \
 ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/scripts/create-vm.ps1
 
 # ------------------------------------------------
