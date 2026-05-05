@@ -28,6 +28,10 @@ Write-Host "Private IP    : $privateIP"
 Write-Host "Kickstart     : $ksFile"
 Write-Host "===================================="
 
+# ---------------------------------------------------
+# Validate Inputs
+# ---------------------------------------------------
+
 # Validate Public Switch
 $pub = Get-VMSwitch -Name $switchName -ErrorAction SilentlyContinue
 if (-not $pub) {
@@ -40,15 +44,23 @@ if (!(Test-Path $isoPath)) {
 }
 
 # ---------------------------------------------------
-# Build Kickstart ISO Folder
+# Kickstart Validation (FIXED)
 # ---------------------------------------------------
 
-$ksRoot   = "C:\Terraform\kickstart"
-$ksSource = Join-Path $ksRoot $ksFile
+# If ksFile is just filename, build full path
+if ($ksFile -notmatch "^[A-Za-z]:\\") {
+    $ksFile = "C:\Terraform\kickstart\$ksFile"
+}
 
-if (!(Test-Path $ksSource)) {
-    Write-Host "WARNING: Kickstart file not found: $ksSource"
-    Write-Host "VM will boot installer normally unless ks file exists."
+Write-Host "Resolved Kickstart Path: $ksFile"
+
+if (!(Test-Path $ksFile)) {
+    throw "Kickstart file NOT found at: $ksFile"
+}
+
+# ---------------------------------------------------
+# VM Creation
+# ---------------------------------------------------
 
 # Check if VM already exists
 $vm = Get-VM -Name $vmName -ErrorAction SilentlyContinue
@@ -63,27 +75,31 @@ if (-not $vm) {
 
     # Create VM
     Write-Host "Creating VM..."
-    New-VM -Name $vmName -Generation 2 -MemoryStartupBytes ($memory * 1MB) -VHDPath $vhdPath -SwitchName $switchName
+    New-VM -Name $vmName -Generation 2 `
+        -MemoryStartupBytes ($memory * 1MB) `
+        -VHDPath $vhdPath `
+        -SwitchName $switchName
+
     Set-VMFirmware -VMName $vmName -EnableSecureBoot Off
 
     # Configure CPU
     Set-VMProcessor -VMName $vmName -Count $cpu
 
-    # Attach ISO to DVD Drive
+    # Attach ISO
     Add-VMDvdDrive -VMName $vmName -Path $isoPath
 
-    # Set boot order to DVD first
+    # Boot from ISO
     $dvd = Get-VMDvdDrive -VMName $vmName
     Set-VMFirmware -VMName $vmName -FirstBootDevice $dvd
 
-    # Add Private NIC if switch exists
+    # Add Private NIC
     $pri = Get-VMSwitch -Name $privateSwitch -ErrorAction SilentlyContinue
     if ($pri) {
         Add-VMNetworkAdapter -VMName $vmName -SwitchName $privateSwitch -Name "PrivateNIC"
         Write-Host "Private NIC added"
     }
     else {
-        Write-Host "Private switch '$privateSwitch' not found. Skipping Private NIC."
+        Write-Host "Private switch '$privateSwitch' not found. Skipping."
     }
 
     # Start VM
