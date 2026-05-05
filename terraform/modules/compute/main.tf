@@ -36,8 +36,8 @@ echo "========================================"
 HOST="winrmadmin@192.168.56.1"
 PASS="winrm@123"
 
-SCRIPT_LOCAL="${path.root}/scripts/create-vm.ps1"
-KS_LOCAL="${path.root}/kickstart/${each.key}.cfg"
+SCRIPT_LOCAL="${path.module}/scripts/create-vm.ps1"
+KS_LOCAL="${path.module}/kickstart/${each.key}.cfg"
 
 SCRIPT_REMOTE="C:/Terraform/scripts/create-vm.ps1"
 KS_REMOTE="C:/Terraform/kickstart/${each.key}.cfg"
@@ -89,11 +89,22 @@ ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/kickstart/${each.value.ks_fi
 # ----------------------------------------
 # Step 4 - Execute script remotely
 # ----------------------------------------
-sshpass -p '${var.hyperv_password}' ssh -o StrictHostKeyChecking=no ${var.hyperv_user}@${var.hyperv_host} "powershell -Command \"New-Item -ItemType Directory -Force -Path C:\\Terraform\\scripts | Out-Null\""
+sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no $HOST \
+"powershell -ExecutionPolicy Bypass -File C:\\Terraform\\scripts\\create-vm.ps1 \
+-vmName ${each.key} \
+-memory ${each.value.memory} \
+-vhdPath \"${each.value.vhd_path}\" \
+-switchName ${each.value.switch_name} \
+-isoPath \"${each.value.iso_path}\" \
+-cpu ${each.value.cpu} \
+-privateSwitch ${var.private_switch} \
+-hostname ${each.value.hostname} \
+-publicIP ${each.value.public_ip} \
+-privateIP ${each.value.private_ip} \
+-ksFile \"C:\\\\Terraform\\\\kickstart\\\\${each.value.ks_file}\""
 
-sshpass -p '${var.hyperv_password}' scp -o StrictHostKeyChecking=no ${path.root}/scripts/create-vm.ps1 ${var.hyperv_user}@${var.hyperv_host}:/C:/Terraform/scripts/create-vm.ps1
+echo "VM ${each.key} creation completed!"
 
-sshpass -p '${var.hyperv_password}' ssh -o StrictHostKeyChecking=no ${var.hyperv_user}@${var.hyperv_host} "powershell -ExecutionPolicy Bypass -File C:\\Terraform\\scripts\\create-vm.ps1 -vmName ${each.key} -memory ${each.value.memory} -vhdPath ${each.value.vhd_path} -switchName ${each.value.switch_name} -isoPath ${each.value.iso_path} -cpu ${each.value.cpu} -privateSwitch ${var.private_switch} -hostname ${each.value.hostname} -publicIP ${each.value.public_ip} -privateIP ${each.value.private_ip} -ksFile ${each.value.ks_file}"
 EOT
   }
 }
